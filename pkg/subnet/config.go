@@ -23,6 +23,8 @@ import (
 	"github.com/flannel-io/flannel/pkg/ip"
 )
 
+// zhou: README,
+
 type Config struct {
 	EnableIPv4     bool
 	EnableIPv6     bool

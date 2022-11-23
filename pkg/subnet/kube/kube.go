@@ -78,6 +78,8 @@ type kubeSubnetManager struct {
 	snFileInfo                *subnetFileInfo
 }
 
+// zhou: README,
+
 func NewSubnetManager(ctx context.Context, apiUrl, kubeconfig, prefix, netConfPath string, setNodeNetworkUnavailable bool) (subnet.Manager, error) {
 	var cfg *rest.Config
 	var err error

@@ -38,6 +38,8 @@ type manager struct {
 	wg       sync.WaitGroup
 }
 
+// zhou: README,
+
 func NewManager(ctx context.Context, sm subnet.Manager, extIface *ExternalInterface) Manager {
 	return &manager{
 		ctx:      ctx,
