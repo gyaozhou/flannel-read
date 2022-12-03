@@ -29,6 +29,8 @@ import (
 	log "k8s.io/klog/v2"
 )
 
+// zhou: README, IO path
+
 func runCProxy(tun *os.File, conn *net.UDPConn, ctl *os.File, tunIP ip.IP4, tunMTU int) {
 	var log_errors int
 	if log.V(1).Enabled() {
@@ -41,6 +43,8 @@ func runCProxy(tun *os.File, conn *net.UDPConn, ctl *os.File, tunIP ip.IP4, tunM
 		return
 	}
 	defer c.Close()
+
+	// zhou: using C code to handle traffic
 
 	C.run_proxy(
 		C.int(tun.Fd()),

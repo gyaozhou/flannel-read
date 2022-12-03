@@ -48,6 +48,8 @@ type network struct {
 	sm     subnet.Manager
 }
 
+// zhou: README, create a new TUN e.g. "flannel0", to forward traffic.
+
 func newNetwork(sm subnet.Manager, extIface *backend.ExternalInterface, port int, nw ip.IP4Net, l *lease.Lease) (*network, error) {
 	n := &network{
 		SimpleNetwork: backend.SimpleNetwork{
@@ -59,6 +61,8 @@ func newNetwork(sm subnet.Manager, extIface *backend.ExternalInterface, port int
 	}
 
 	n.tunNet = nw
+
+	// zhou:
 
 	if err := n.initTun(); err != nil {
 		return nil, err
@@ -78,6 +82,8 @@ func newNetwork(sm subnet.Manager, extIface *backend.ExternalInterface, port int
 	return n, nil
 }
 
+// zhou: README, main loop
+
 func (n *network) Run(ctx context.Context) {
 	defer func() {
 		n.tun.Close()
@@ -92,6 +98,7 @@ func (n *network) Run(ctx context.Context) {
 
 	wg.Add(1)
 	go func() {
+		// zhou: IO path
 		runCProxy(n.tun, n.conn, n.ctl2, n.tunNet.IP, n.MTU())
 		wg.Done()
 	}()
@@ -117,6 +124,8 @@ func (n *network) Run(ctx context.Context) {
 	}
 }
 
+// zhou: overlay MTU
+
 func (n *network) MTU() int {
 	return n.ExtIface.Iface.MTU - encapOverhead
 }
@@ -131,6 +140,8 @@ func newCtlSockets() (*os.File, *os.File, error) {
 	f2 := os.NewFile(uintptr(fds[1]), "ctl")
 	return f1, f2, nil
 }
+
+// zhou: README, TUN device "flannel0" in not be used.
 
 func (n *network) initTun() error {
 	var tunName string
@@ -185,6 +196,8 @@ func configureIface(ifname string, ipn ip.IP4Net, mtu int) error {
 
 	return nil
 }
+
+// zhou: README,
 
 func (n *network) processSubnetEvents(batch []lease.Event) {
 	for _, evt := range batch {

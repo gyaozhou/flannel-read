@@ -49,6 +49,8 @@ func NewManager(ctx context.Context, sm subnet.Manager, extIface *ExternalInterf
 	}
 }
 
+// zhou: README,
+
 func (bm *manager) GetBackend(backendType string) (Backend, error) {
 	bm.mux.Lock()
 	defer bm.mux.Unlock()
@@ -89,6 +91,8 @@ func (bm *manager) GetBackend(backendType string) (Backend, error) {
 
 	return be, nil
 }
+
+// zhou: backend implements register
 
 func Register(name string, ctor BackendCtor) {
 	constructors[name] = ctor

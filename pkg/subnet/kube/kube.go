@@ -61,6 +61,8 @@ type subnetFileInfo struct {
 	mtu    int
 }
 
+// zhou: used to interact with api server to store subnet info in "Node.Spec.PodCIDRs".
+
 type kubeSubnetManager struct {
 	enableIPv4                bool
 	enableIPv6                bool
@@ -78,7 +80,19 @@ type kubeSubnetManager struct {
 	snFileInfo                *subnetFileInfo
 }
 
-// zhou: README,
+// zhou: README, comparing to "subnet/etcd", this method store flannel info within api server.
+//
+//       netConfPat path to read "net-conf.json", which defined in kube-flannel.yml.
+//       It defines the backend type and subnetwork CIDR.
+/*
+   {
+     "Network": "10.244.0.0/16",
+     "Backend": {
+       "Type": "vxlan"
+     }
+   }
+
+*/
 
 func NewSubnetManager(ctx context.Context, apiUrl, kubeconfig, prefix, netConfPath string, setNodeNetworkUnavailable bool) (subnet.Manager, error) {
 	var cfg *rest.Config
@@ -150,6 +164,8 @@ func NewSubnetManager(ctx context.Context, apiUrl, kubeconfig, prefix, netConfPa
 
 	return sm, nil
 }
+
+// zhou:
 
 // newKubeSubnetManager fills the kubeSubnetManager. The most important part is the controller which will
 // watch for kubernetes node updates

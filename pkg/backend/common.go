@@ -40,6 +40,8 @@ type Backend interface {
 	RegisterNetwork(ctx context.Context, wg *sync.WaitGroup, config *subnet.Config) (Network, error)
 }
 
+// zhou: each type backend should implement this interface.
+
 type Network interface {
 	Lease() *lease.Lease
 	MTU() int

@@ -19,6 +19,8 @@ import (
 	"golang.org/x/net/context"
 )
 
+// zhou: backend example, super class
+
 type SimpleNetwork struct {
 	SubnetLease *lease.Lease
 	ExtIface    *ExternalInterface

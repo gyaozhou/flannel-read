@@ -23,7 +23,7 @@ import (
 	"github.com/flannel-io/flannel/pkg/ip"
 )
 
-// zhou: README,
+// zhou: subnet config and backend type
 
 type Config struct {
 	EnableIPv4     bool
@@ -54,6 +54,8 @@ func parseBackendType(be json.RawMessage) (string, error) {
 
 	return bt.Type, nil
 }
+
+// zhou:
 
 func ParseConfig(s string) (*Config, error) {
 	cfg := new(Config)

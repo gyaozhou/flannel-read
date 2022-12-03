@@ -202,6 +202,8 @@ static int del_route(struct ip_net dst) {
 	return ENOENT;
 }
 
+// zhou: README, find the node to forward
+
 static struct sockaddr_in *find_route(in_addr_t dst) {
 	size_t i;
 
@@ -263,6 +265,8 @@ static ssize_t sock_recv_packet(int sock, char *buf, size_t buflen) {
 	return nread;
 }
 
+// zhou: send to peer node
+
 static void sock_send_packet(int sock, char *pkt, size_t pktlen, struct sockaddr_in *dst) {
 	ssize_t nsent = sendto(sock, pkt, pktlen, 0, (struct sockaddr *)dst, sizeof(struct sockaddr_in));
 
@@ -276,6 +280,8 @@ static void sock_send_packet(int sock, char *pkt, size_t pktlen, struct sockaddr
 		}
 	}
 }
+
+// zhou: receive and deliver to pod
 
 static void tun_send_packet(int tun, char *pkt, size_t pktlen) {
 	ssize_t nsent;
@@ -313,6 +319,8 @@ inline static int decrement_ttl(struct iphdr *iph) {
 	return 1;
 }
 
+// zhou: send out of node
+
 static int tun_to_udp(int tun, int sock, char *buf, size_t buflen) {
 	struct iphdr *iph;
 	struct sockaddr_in *next_hop;
@@ -320,8 +328,10 @@ static int tun_to_udp(int tun, int sock, char *buf, size_t buflen) {
 	ssize_t pktlen = tun_recv_packet(tun, buf, buflen);
 	if( pktlen < 0 )
 		return 0;
-	
+
 	iph = (struct iphdr *)buf;
+
+    // zhou:
 
 	next_hop = find_route((in_addr_t) iph->daddr);
 	if( !next_hop ) {
@@ -340,6 +350,8 @@ static int tun_to_udp(int tun, int sock, char *buf, size_t buflen) {
 _active:
 	return 1;
 }
+
+// zhou: receive from outside
 
 static int udp_to_tun(int sock, int tun, char *buf, size_t buflen) {
 	struct iphdr *iph;
@@ -431,6 +443,8 @@ void run_proxy(int tun, int sock, int ctl, in_addr_t tun_ip, size_t tun_mtu, int
 
 	fcntl(tun, F_SETFL, O_NONBLOCK);
 
+    // zhou: README,
+
 	while( !exit_flag ) {
 		int nfds = poll(fds, PFD_CNT, -1), activity;
 		if( nfds < 0 ) {
@@ -463,4 +477,3 @@ void run_proxy(int tun, int sock, int ctl, in_addr_t tun_ip, size_t tun_mtu, int
 
 	free(buf);
 }
-

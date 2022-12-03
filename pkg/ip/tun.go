@@ -46,6 +46,8 @@ func fromZeroTerm(s []byte) string {
 	return string(bytes.TrimRight(s, "\000"))
 }
 
+// zhou: open TUN device, and create a new one.
+
 func OpenTun(name string) (*os.File, string, error) {
 	tun, err := os.OpenFile(tunDevice, os.O_RDWR, 0)
 	if err != nil {

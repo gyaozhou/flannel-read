@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 //go:build !amd64 && !windows
 // +build !amd64,!windows
 
@@ -24,6 +25,8 @@ import (
 	"github.com/flannel-io/flannel/pkg/lease"
 	"github.com/flannel-io/flannel/pkg/subnet"
 )
+
+// zhou: this file will not be built in platform amd64 and windows. Refer to udp_network_amd64.go
 
 func newNetwork(sm subnet.Manager, extIface *backend.ExternalInterface, port int, nw ip.IP4Net, l *lease.Lease) (*backend.SimpleNetwork, error) {
 	return nil, fmt.Errorf("UDP backend is not supported on this architecture")
